@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviourPun
     public Rigidbody2D rig;
     public Player photonPlayer;
     public SpriteRenderer sr;
-    public Animator weaponAnim;
     // local player
     public static PlayerController me;
     public HeaderInfo headerInfo;
@@ -43,6 +42,10 @@ public class PlayerController : MonoBehaviourPun
         //    weaponAnim.transform.parent.localScale = new Vector3(1, 1, 1);
         //else
         //    weaponAnim.transform.parent.localScale = new Vector3(-1, 1, 1);
+        Vector2 dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
+        float angle = Vector2.SignedAngle(SlashOrigin.position, dir);
+        SlashOrigin.rotation = Quaternion.Euler(0, 0, angle + 225);
+        Debug.DrawRay(SlashOrigin.position, dir, Color.white);
     }
     void Move()
     {
@@ -58,8 +61,9 @@ public class PlayerController : MonoBehaviourPun
         lastAttackTime = Time.time;
         // calculate the direction
         Vector2 dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
-        float angle = Vector2.Angle(dir, SlashOrigin.position);
-        SlashOrigin.rotation = Quaternion.Euler(0, 0, angle);
+
+        float angle = Vector2.SignedAngle(SlashOrigin.position, dir);
+        SlashOrigin.rotation = Quaternion.Euler(0, 0, angle + 225);
         // play attack animation
         slash.GetComponent<Animator>().SetTrigger("Slash");
     }

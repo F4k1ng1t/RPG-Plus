@@ -24,7 +24,7 @@ public class SlashBehavior : MonoBehaviour
         slash.enabled = true;
         hitbox.enabled = true;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -32,5 +32,6 @@ public class SlashBehavior : MonoBehaviour
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, this.GetComponentInParent<PlayerController>().damage);
         }
+        Debug.Log("Enemy Spotted");
     }
 }
